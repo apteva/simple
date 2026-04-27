@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { streamTasks, type Task } from "../api/tasks.ts";
+import { isAppInstalled } from "../lib/installed-apps.ts";
 
 // Live task list for one instance. The SSE stream's backfill on open
 // covers history, so we don't pre-fetch via listTasks — saves a
@@ -12,6 +13,16 @@ export function useTasks(instanceId: number | null) {
 
   useEffect(() => {
     if (!instanceId) return;
+    // Soft dependency on the `tasks` app. When apteva-server reports
+    // the tasks app isn't installed, skip the SSE entirely — the
+    // endpoint would 404 and the console would fill with noise.
+    // Falls through to "always try" when the helper can't determine
+    // the install state (legacy bundles, non-static deployments).
+    if (isAppInstalled("tasks") === false) {
+      setTasks([]);
+      setConnected(false);
+      return;
+    }
     byId.current = new Map();
     setTasks([]);
     setConnected(false);

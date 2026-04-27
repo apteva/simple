@@ -18,6 +18,17 @@ tags: [ui, observability, read-only]
 scopes: [project, global]
 min_apteva_version: "0.10.0"
 
+requires:
+  apps:
+    - name: tasks
+      version: ">=1.0.0"
+      reason: "Powers the Tasks card — pulls from /api/apps/tasks/instances/:id."
+      optional: false
+    - name: status
+      version: ">=1.0.0"
+      reason: "Surfaces the agent's current status line above the activity feed."
+      optional: true
+
 # A static UI app contributes only assets — no MCP tools, no custom
 # HTTP routes, no DB schema. Apteva-server mounts `dist/` directly on
 # its own HTTP mux at the configured prefix; runtime config (mount
