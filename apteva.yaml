@@ -1,19 +1,19 @@
 schema: apteva-app/v1
 
 name: simple
-display_name: Client Watch
+display_name: Simple
 version: 0.1.0
 description: |
-  Read-only kiosk view of an Apteva agent — for client-facing
-  deployments. Clients log in (or open a URL with an API key) and see
-  their agent's directive, live thoughts, tool calls, sub-agents, and
-  chat. No editing, no team management, no agent reconfiguration —
-  pure observation.
+  Minimal read-only UI for watching an Apteva agent — embed anywhere
+  on the same host. Shows the agent's directive, live thoughts, tool
+  calls, sub-agents, and chat. No editing, no team management, no
+  agent reconfiguration — pure observation. Useful as a stripped-down
+  dashboard for yourself or as a kiosk view shared with a client.
 
 author: Apteva
 homepage: https://github.com/apteva/simple
 icon: https://raw.githubusercontent.com/apteva/simple/main/icon.png
-tags: [ui, client, kiosk, observability]
+tags: [ui, observability, read-only]
 
 scopes: [project, global]
 min_apteva_version: "0.10.0"
