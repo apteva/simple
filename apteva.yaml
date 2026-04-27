@@ -1,0 +1,67 @@
+schema: apteva-app/v1
+
+name: simple
+display_name: Client Watch
+version: 0.1.0
+description: |
+  Read-only kiosk view of an Apteva agent — for client-facing
+  deployments. Clients log in (or open a URL with an API key) and see
+  their agent's directive, live thoughts, tool calls, sub-agents, and
+  chat. No editing, no team management, no agent reconfiguration —
+  pure observation.
+
+author: Apteva
+homepage: https://github.com/apteva/simple
+icon: https://raw.githubusercontent.com/apteva/simple/main/icon.png
+tags: [ui, client, kiosk, observability]
+
+scopes: [project, global]
+min_apteva_version: "0.10.0"
+
+# A static UI app contributes only assets — no MCP tools, no custom
+# HTTP routes, no DB schema. Apteva-server mounts `dist/` directly on
+# its own HTTP mux at the configured prefix; runtime config (mount
+# path, default project, optional kiosk API key, branding) is injected
+# into `index.html` at request time so a single prebuilt bundle can be
+# reused across many tenants.
+provides:
+  ui_app:
+    domain_template: ""             # empty = same-origin, path-mounted
+    mount_path: /client             # default; per-install override via config_schema below
+    auth: platform
+    branding:
+      title_template: "{name}"
+      logo: ""
+      theme_css: ""
+
+runtime:
+  kind: static
+  # Relative path inside the cloned repo. Apteva-server's installer
+  # clones runtime.source, then mounts <clone>/dist. dist/ is committed
+  # to git so the install works without a build step on the host.
+  static_dir: dist
+  source:
+    repo: github.com/apteva/simple
+    ref: main
+
+config_schema:
+  - name: mount_path
+    type: text
+    default: /client
+    label: URL prefix
+    description: Where this kiosk view is reachable on the server (e.g. /client, /watch).
+  - name: default_project
+    type: text
+    default: ""
+    label: Default project
+    description: Pre-filter the instance picker to a single project's agents.
+  - name: kiosk_api_key
+    type: password
+    default: ""
+    label: Kiosk API key (optional)
+    description: |
+      When set, the page authenticates with this key and skips the
+      login screen — useful for a shared display or a partner portal.
+      Leave blank to require operator login.
+
+upgrade_policy: auto-patch
