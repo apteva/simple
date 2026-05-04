@@ -2,7 +2,7 @@ schema: apteva-app/v1
 
 name: simple
 display_name: Simple
-version: 0.1.0
+version: 0.1.1
 description: |
   Minimal read-only UI for watching an Apteva agent — embed anywhere
   on the same host. Shows the agent's directive, live thoughts, tool
@@ -47,13 +47,12 @@ provides:
 
 runtime:
   kind: static
-  # Relative path inside the cloned repo. Apteva-server's installer
-  # clones runtime.source, then mounts <clone>/dist. dist/ is committed
-  # to git so the install works without a build step on the host.
+  # Path inside the extracted bundle tarball. The release tarball is
+  # packed with `tar -czf foo.tgz dist`, preserving the dist/ prefix.
   static_dir: dist
-  source:
-    repo: github.com/apteva/simple
-    ref: main
+  bundle:
+    url: https://github.com/apteva/simple/releases/download/v0.1.1/simple-0.1.1.tgz
+    sha256: 1ab4b66c42c9ca02bb8010d4ba236a3570fa34c0d83bbccde4678bf91e463ba8
 
 config_schema:
   - name: mount_path
